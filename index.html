@@ -29,7 +29,7 @@
         body {
             background-color: var(--white);
             color: var(--text-dark);
-            overflow: hidden; /* Mencegah scroll manual */
+            overflow: hidden;
             width: 100vw;
             height: 100vh;
         }
@@ -142,7 +142,6 @@
             z-index: 10;
         }
 
-        /* Tombol Next Lanjut */
         .fade-btn {
             opacity: 0;
             pointer-events: none;
@@ -248,7 +247,7 @@
             font-size: 2.5rem;
             font-weight: 600;
             margin-bottom: 1rem;
-            min-height: 80px; /* Ruang untuk efek ngetik */
+            min-height: 80px;
         }
 
         .greeting-subtitle {
@@ -296,7 +295,7 @@
 
         .polaroid {
             background: white;
-            padding: 10px;
+            padding: 10px; /* Jarak border putih */
             border-radius: 8px;
             box-shadow: 0 10px 25px rgba(0,0,0,0.1);
             cursor: pointer;
@@ -304,7 +303,6 @@
             position: relative;
         }
         
-        /* Scatter effect */
         .polaroid:nth-child(1) { transform: rotate(-5deg); }
         .polaroid:nth-child(2) { transform: rotate(3deg) translateY(10px); }
         .polaroid:nth-child(3) { transform: rotate(-2deg) translateY(-5px); }
@@ -319,10 +317,10 @@
         .polaroid img {
             width: 100%;
             height: auto;
-            aspect-ratio: 3 / 4; /* Rasio potret vertikal */
+            aspect-ratio: 3 / 4; /* Tetap potret! */
             object-fit: cover;
             border-radius: 4px;
-            background-color: #f0f0f0; /* Fallback jika gambar rusak */
+            background-color: #f0f0f0;
         }
 
         #lightbox {
@@ -343,15 +341,36 @@
         .lightbox-content {
             position: relative;
             max-width: 90%;
-            max-height: 85vh; /* Diperbesar untuk foto potret */
+            max-height: 90vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
 
         .lightbox-img {
             max-width: 100%;
-            max-height: 85vh; /* Diperbesar untuk foto potret */
+            max-height: 75vh; /* Disediakan ruang buat caption */
             border-radius: 12px;
             box-shadow: 0 20px 50px rgba(0,0,0,0.2);
             background-color: #eee;
+            object-fit: contain;
+        }
+
+        /* STYLING KUTIPAN BARU */
+        .lightbox-quote {
+            margin-top: 15px;
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            padding: 10px 25px;
+            border-radius: 30px;
+            color: var(--text-dark);
+            font-size: 1rem;
+            font-weight: 500;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            border: 1px solid rgba(255,255,255,0.8);
+            max-width: 90%;
         }
 
         .lightbox-close {
@@ -361,6 +380,10 @@
             color: var(--text-dark);
             cursor: pointer;
             z-index: 201;
+            background: rgba(255,255,255,0.5);
+            width: 40px; height: 40px;
+            display: flex; justify-content: center; align-items: center;
+            border-radius: 50%;
         }
 
         .lightbox-nav {
@@ -372,33 +395,56 @@
             cursor: pointer;
             padding: 20px;
             user-select: none;
-            background: rgba(255,255,255,0.3);
+            background: rgba(255,255,255,0.4);
             border-radius: 50%;
             width: 50px; height: 50px;
             display: flex; justify-content: center; align-items: center;
             backdrop-filter: blur(5px);
+            z-index: 201;
         }
         
-        .lightbox-nav:hover { background: rgba(255,255,255,0.6); }
+        .lightbox-nav:hover { background: rgba(255,255,255,0.8); }
         .nav-prev { left: 20px; }
         .nav-next { right: 20px; }
+
+        @media (max-width: 600px) {
+            .lightbox-quote { font-size: 0.9rem; padding: 8px 20px; }
+            .lightbox-nav { width: 40px; height: 40px; font-size: 1.5rem; }
+            .nav-prev { left: 10px; }
+            .nav-next { right: 10px; }
+        }
 
         .letter-card {
             width: 90%;
             max-width: 700px;
+            max-height: 70vh; /* Membatasi tinggi maksimal agar tidak menutupi tombol */
             padding: 3rem;
             text-align: justify;
             line-height: 1.8;
             font-size: 1rem;
             position: relative;
+            overflow-y: auto; /* Memungkinkan scrolling di dalam card jika konten terlalu panjang */
+            overscroll-behavior: contain; /* Mencegah efek bounce scroll ke elemen di belakangnya */
         }
         
+        /* Mengustomisasi tampilan scrollbar agar terlihat lebih elegan (khusus untuk Webkit seperti Chrome/Safari) */
+        .letter-card::-webkit-scrollbar {
+            width: 6px;
+        }
+        .letter-card::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .letter-card::-webkit-scrollbar-thumb {
+            background-color: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+        }
+
         @media (max-width: 600px) {
             .letter-card { padding: 2rem 1.5rem; font-size: 0.95rem; }
         }
 
         .typewriter-text {
-            min-height: 200px; /* Mencegah layout lompat saat ngetik */
+            min-height: 200px;
         }
 
         #ending {
@@ -481,22 +527,17 @@
 </head>
 <body>
 
-    <!-- Audio Element -->
     <audio id="bg-music" loop>
         <source src="assets/audio/music.mp3" type="audio/mpeg">
     </audio>
 
-    <!-- Music Controller -->
     <div class="glass-panel music-controller" id="music-controller" onclick="toggleMusic()">
         <svg class="music-icon spin" id="music-icon" viewBox="0 0 24 24">
             <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 14.5c-2.49 0-4.5-2.01-4.5-4.5S9.51 7.5 12 7.5s4.5 2.01 4.5 4.5-2.01 4.5-4.5 4.5zm0-7.5c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/>
         </svg>
     </div>
 
-    <!-- Toast Notification -->
     <div id="toast">Nama tidak boleh kosong ya!</div>
-    
-    <!-- White Flash Transition -->
     <div class="flash-white" id="flash-white"></div>
 
     <section id="landing-page" class="section-container active-step bg-animated-pastel">
@@ -516,7 +557,6 @@
         </div>
     </section>
 
-    <!-- KONTEN UTAMA (STEP BY STEP) -->
     <section id="greeting" class="section-container bg-animated-pastel">
         <canvas id="confetti-canvas"></canvas>
         <div class="greeting-content glass-panel" style="z-index: 2;">
@@ -547,12 +587,13 @@
         <button class="btn-primary fade-btn" id="btn-next-2" onclick="nextStep()">Lanjut ✨</button>
     </section>
 
-    <!-- Lightbox Element -->
     <div id="lightbox">
         <div class="lightbox-close" onclick="closeLightbox()">&times;</div>
         <div class="lightbox-nav nav-prev" onclick="changeImage(-1)">&#10094;</div>
         <div class="lightbox-content">
             <img src="" class="lightbox-img" id="lightbox-img">
+            <!-- Tempat Caption Baru -->
+            <div class="lightbox-quote" id="lightbox-quote"></div>
         </div>
         <div class="lightbox-nav nav-next" onclick="changeImage(1)">&#10095;</div>
     </div>
@@ -593,17 +634,32 @@
         const steps = ['greeting', 'gallery', 'letter', 'ending', 'final-page'];
         let currentStepIndex = 0;
 
-        // Data Foto untuk Gallery
+        // DATA FOTO DAN KUTIPANNYA (BISA KAMU UBAH DI SINI)
         const galleryData = [
-            { src: "assets/images/foto1.jpg", fallback: "https://placehold.co/600x800/lavender/555?text=Foto+1" },
-            { src: "assets/images/foto2.jpg", fallback: "https://placehold.co/600x800/peach/555?text=Foto+2" },
-            { src: "assets/images/foto3.jpg", fallback: "https://placehold.co/600x800/soft-yellow/555?text=Foto+3" },
-            { src: "assets/images/foto4.jpg", fallback: "https://placehold.co/600x800/baby-blue/555?text=Foto+4" }
+            { 
+                src: "assets/images/foto1.jpg", 
+                fallback: "https://placehold.co/600x800/lavender/555?text=Foto+1",
+                quote: "Perjuangan ngerjain bab awal yang penuh drama 😅"
+            },
+            { 
+                src: "assets/images/foto2.jpg", 
+                fallback: "https://placehold.co/600x800/peach/555?text=Foto+2",
+                quote: "Berapa banyak kopi yang habis nemenin malam-malam revisi? ☕"
+            },
+            { 
+                src: "assets/images/foto3.jpg", 
+                fallback: "https://placehold.co/600x800/soft-yellow/555?text=Foto+3",
+                quote: "Momen bimbingan yang bikin deg-degan tapi ngangenin ✨"
+            },
+            { 
+                src: "assets/images/foto4.jpg", 
+                fallback: "https://placehold.co/600x800/baby-blue/555?text=Foto+4",
+                quote: "Dan akhirnya, hari ini tiba. You did it! 🎉"
+            }
         ];
 
         let currentImageIndex = 0;
 
-        // Isi Surat
         const letterContent = `Hai [Nama],
         
 Mungkin kata 'selamat' aja nggak cukup buat nebus semua rasa capek, kurang tidur, dan pusingnya mikirin revisi selama beberapa bulan terakhir. 
@@ -621,7 +677,6 @@ Semangat terus buat sidang akhirnya nanti ya!`;
             setTimeout(() => { toast.style.top = '-100px'; }, 3000);
         }
 
-        // Efek ngetik teks
         function typeWriter(text, elementId, speed = 40, callback) {
             let i = 0;
             const element = document.getElementById(elementId);
@@ -644,25 +699,22 @@ Semangat terus buat sidang akhirnya nanti ya!`;
         }
 
         function showStep(index) {
-            // Sembunyikan semua step container
             document.querySelectorAll('.section-container').forEach(sec => {
                 sec.classList.remove('active-step');
             });
             
-            // Tampilkan target
             const targetId = steps[index];
             const targetEl = document.getElementById(targetId);
             
             if (targetEl) {
                 targetEl.classList.add('active-step');
                 
-                // Eksekusi animasi khusus tiap halaman
                 if (targetId === 'greeting') {
                     startGreetingAnimation();
                 } else if (targetId === 'gallery') {
                     setTimeout(() => {
                         document.getElementById('btn-next-2').classList.add('show');
-                    }, 1500); // Tahan tombol biar liat foto dulu
+                    }, 1500); 
                 } else if (targetId === 'letter') {
                     startLetterAnimation();
                 } else if (targetId === 'ending') {
@@ -688,7 +740,6 @@ Semangat terus buat sidang akhirnya nanti ya!`;
             
             userName = input.value.trim();
             
-            // Mulai transisi
             document.getElementById('landing-page').classList.remove('active-step');
             document.getElementById('loading-screen').classList.add('active-step');
             document.getElementById('loading-screen').style.display = 'flex';
@@ -725,8 +776,8 @@ Semangat terus buat sidang akhirnya nanti ya!`;
                 document.getElementById('loading-screen').style.display = "none";
                 document.getElementById('music-controller').style.display = "flex";
                 
-                playMusic(); // Coba putar musik
-                showStep(0); // Masuk ke step 'greeting'
+                playMusic(); 
+                showStep(0); 
                 
                 flash.style.opacity = "0";
             }, 800);
@@ -745,7 +796,6 @@ Semangat terus buat sidang akhirnya nanti ya!`;
             audio.play().then(() => {
                 isMusicPlaying = true;
                 document.getElementById('music-icon').classList.add('spin');
-                // Fade in audio
                 let vol = 0;
                 const fade = setInterval(() => {
                     if (vol < 0.5) { vol += 0.05; audio.volume = vol; } 
@@ -760,7 +810,6 @@ Semangat terus buat sidang akhirnya nanti ya!`;
         function pauseMusic() {
             isMusicPlaying = false;
             document.getElementById('music-icon').classList.remove('spin');
-            // Fade out audio
             let vol = audio.volume;
             const fade = setInterval(() => {
                 if (vol > 0.05) { vol -= 0.05; audio.volume = vol; } 
@@ -802,6 +851,7 @@ Semangat terus buat sidang akhirnya nanti ya!`;
 
         const lightbox = document.getElementById('lightbox');
         const lightboxImg = document.getElementById('lightbox-img');
+        const lightboxQuote = document.getElementById('lightbox-quote');
 
         function openLightbox(index) {
             currentImageIndex = index;
@@ -824,14 +874,17 @@ Semangat terus buat sidang akhirnya nanti ya!`;
 
         function updateLightboxContent() {
             const data = galleryData[currentImageIndex];
-            // Coba load gambar asli, jika error pakai fallback
+            
+            // Set Caption
+            lightboxQuote.textContent = data.quote;
+
+            // Load Gambar
             const img = new Image();
             img.onload = () => { lightboxImg.src = data.src; };
             img.onerror = () => { lightboxImg.src = data.fallback; };
             img.src = data.src;
         }
 
-        // Swipe support untuk lightbox (Mobile)
         let touchstartX = 0;
         let touchendX = 0;
         lightbox.addEventListener('touchstart', e => { touchstartX = e.changedTouches[0].screenX; });
@@ -840,16 +893,14 @@ Semangat terus buat sidang akhirnya nanti ya!`;
             handleSwipe();
         });
         function handleSwipe() {
-            if (touchendX < touchstartX - 50) changeImage(1); // Swipe left
-            if (touchendX > touchstartX + 50) changeImage(-1); // Swipe right
+            if (touchendX < touchstartX - 50) changeImage(1); 
+            if (touchendX > touchstartX + 50) changeImage(-1); 
         }
 
         lightbox.addEventListener('click', (e) => {
             if (e.target === lightbox || e.target.classList.contains('lightbox-content')) closeLightbox();
         });
-
         
-        // 1. Confetti
         function startConfetti(canvasId) {
             const canvas = document.getElementById(canvasId);
             const ctx = canvas.getContext('2d');
@@ -896,7 +947,6 @@ Semangat terus buat sidang akhirnya nanti ya!`;
             animate();
         }
 
-        // 2. Night Sky (Stars)
         function initNightSky() {
             const container = document.getElementById('stars-container');
             container.innerHTML = '';
@@ -913,7 +963,6 @@ Semangat terus buat sidang akhirnya nanti ya!`;
             }
         }
 
-        // 3. Fireworks
         function startFireworks() {
             const canvas = document.getElementById('fireworks-canvas');
             const ctx = canvas.getContext('2d');
@@ -940,7 +989,7 @@ Semangat terus buat sidang akhirnya nanti ya!`;
             }
             
             function animate() {
-                ctx.fillStyle = 'rgba(10, 14, 39, 0.2)'; // Efek trail
+                ctx.fillStyle = 'rgba(10, 14, 39, 0.2)'; 
                 ctx.fillRect(0, 0, canvas.width, canvas.height);
                 
                 if(Math.random() < 0.03) {
@@ -951,7 +1000,7 @@ Semangat terus buat sidang akhirnya nanti ya!`;
                     let p = particles[i];
                     p.x += p.vx;
                     p.y += p.vy;
-                    p.vy += 0.05; // gravity
+                    p.vy += 0.05; 
                     p.alpha -= p.decay;
                     
                     ctx.beginPath();
@@ -971,7 +1020,6 @@ Semangat terus buat sidang akhirnya nanti ya!`;
             return result ? `${parseInt(result[1], 16)}, ${parseInt(result[2], 16)}, ${parseInt(result[3], 16)}` : '255,255,255';
         }
 
-        // Handle Resize
         window.addEventListener('resize', () => {
             const confetti = document.getElementById('confetti-canvas');
             const fw = document.getElementById('fireworks-canvas');
