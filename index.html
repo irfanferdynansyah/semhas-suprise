@@ -295,7 +295,7 @@
 
         .polaroid {
             background: white;
-            padding: 10px; /* Jarak border putih */
+            padding: 10px; /* Jarak border putih agar terlihat tanpa caption */
             border-radius: 8px;
             box-shadow: 0 10px 25px rgba(0,0,0,0.1);
             cursor: pointer;
@@ -349,14 +349,13 @@
 
         .lightbox-img {
             max-width: 100%;
-            max-height: 75vh; /* Disediakan ruang buat caption */
+            max-height: 75vh; /* Ruang buat caption popup */
             border-radius: 12px;
             box-shadow: 0 20px 50px rgba(0,0,0,0.2);
             background-color: #eee;
             object-fit: contain;
         }
 
-        /* STYLING KUTIPAN BARU */
         .lightbox-quote {
             margin-top: 15px;
             background: rgba(255, 255, 255, 0.6);
@@ -417,34 +416,30 @@
         .letter-card {
             width: 90%;
             max-width: 700px;
-            max-height: 70vh; /* Membatasi tinggi maksimal agar tidak menutupi tombol */
+            max-height: 70vh; /* Agar tidak menutupi tombol lanjut */
             padding: 3rem;
             text-align: justify;
             line-height: 1.8;
-            font-size: 1rem;
+            font-size: 1.1rem;
             position: relative;
-            overflow-y: auto; /* Memungkinkan scrolling di dalam card jika konten terlalu panjang */
-            overscroll-behavior: contain; /* Mencegah efek bounce scroll ke elemen di belakangnya */
+            overflow-y: auto; /* Bisa discroll kalo kepanjangan */
+            overscroll-behavior: contain;
         }
         
-        /* Mengustomisasi tampilan scrollbar agar terlihat lebih elegan (khusus untuk Webkit seperti Chrome/Safari) */
-        .letter-card::-webkit-scrollbar {
-            width: 6px;
-        }
-        .letter-card::-webkit-scrollbar-track {
-            background: transparent;
-        }
+        /* Custom Scrollbar tipis elegan */
+        .letter-card::-webkit-scrollbar { width: 6px; }
+        .letter-card::-webkit-scrollbar-track { background: transparent; }
         .letter-card::-webkit-scrollbar-thumb {
-            background-color: rgba(0, 0, 0, 0.2);
+            background-color: rgba(0, 0, 0, 0.15);
             border-radius: 10px;
         }
 
         @media (max-width: 600px) {
-            .letter-card { padding: 2rem 1.5rem; font-size: 0.95rem; }
+            .letter-card { padding: 2rem 1.5rem; font-size: 1rem; }
         }
 
         .typewriter-text {
-            min-height: 200px;
+            min-height: 100px;
         }
 
         #ending {
@@ -592,7 +587,6 @@
         <div class="lightbox-nav nav-prev" onclick="changeImage(-1)">&#10094;</div>
         <div class="lightbox-content">
             <img src="" class="lightbox-img" id="lightbox-img">
-            <!-- Tempat Caption Baru -->
             <div class="lightbox-quote" id="lightbox-quote"></div>
         </div>
         <div class="lightbox-nav nav-next" onclick="changeImage(1)">&#10095;</div>
@@ -626,7 +620,6 @@
         </div>
     </section>
 
-
     <script>
         let userName = "";
         let isMusicPlaying = false;
@@ -634,7 +627,7 @@
         const steps = ['greeting', 'gallery', 'letter', 'ending', 'final-page'];
         let currentStepIndex = 0;
 
-        // DATA FOTO DAN KUTIPANNYA (BISA KAMU UBAH DI SINI)
+        // DATA FOTO DAN KUTIPAN SAAT DI-KLIK
         const galleryData = [
             { 
                 src: "assets/images/foto1.jpg", 
@@ -660,15 +653,8 @@
 
         let currentImageIndex = 0;
 
-        const letterContent = `Hai [Nama],
-        
-Mungkin kata 'selamat' aja nggak cukup buat nebus semua rasa capek, kurang tidur, dan pusingnya mikirin revisi selama beberapa bulan terakhir. 
-
-Aku cuma mau bilang, aku bangga banget liat kamu bisa ngelewatin salah satu fase terberat di masa kuliah ini. Seminar Hasil itu bukan cuma soal presentasi, tapi bukti nyata kalau kamu tangguh dan ngga gampang nyerah.
-
-Tinggal satu langkah lagi menuju gelar sarjana. Istirahat sebentar, rayain pencapaian kecil ini. You did it, and you did it so well!
-
-Semangat terus buat sidang akhirnya nanti ya!`;
+        // ISI SURAT YANG SUDAH DIPERSINGKAT
+        const letterContent = `Hai [Nama], 🤍\n\nAkhir dari satu perjalanan, awal dari cerita baru.\n\nSegala begadang, tangis, dan kopi yang tumpah selama ini akhirnya berubah jadi senyum lega hari ini. Terima kasih udah bertahan dan nggak nyerah sama revisian.\n\nYou did it! Aku selalu bangga sama kamu.\nSelamat Semhas, ya! ✨`;
 
         function showToast(message) {
             const toast = document.getElementById('toast');
@@ -874,17 +860,14 @@ Semangat terus buat sidang akhirnya nanti ya!`;
 
         function updateLightboxContent() {
             const data = galleryData[currentImageIndex];
-            
-            // Set Caption
             lightboxQuote.textContent = data.quote;
-
-            // Load Gambar
             const img = new Image();
             img.onload = () => { lightboxImg.src = data.src; };
             img.onerror = () => { lightboxImg.src = data.fallback; };
             img.src = data.src;
         }
 
+        // Swipe logic for touchscreens
         let touchstartX = 0;
         let touchendX = 0;
         lightbox.addEventListener('touchstart', e => { touchstartX = e.changedTouches[0].screenX; });
